@@ -1,4 +1,4 @@
-percorso = [0, pi, 0.7*pi, 0.5*pi];
+percorso = [0, pi];
 n = length(percorso);
 
 while true 
@@ -20,7 +20,8 @@ while true
         tempi = leggiTempi(n);
         parametri = generaPolinomiCubici(percorso, velocita, tempi);
         disp(parametri);
-        stampaGrafico(parametri, tempi);   
+        %stampaGrafico(parametri, tempi);
+        animazione(parametri, tempi);
     end
 
     if scelta == 2
