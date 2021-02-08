@@ -1,23 +1,56 @@
-function [] = animazione(parametri, tempi)
-    count = 1;
+function [] = animazione(parametri, tempi, salvaVideo)
+    disp('Animazione in esecuzione...')
+    if (salvaVideo)
+        count = 1;
+        num_frames = size(tempi, 2) * 100 * size(parametri, 1); % 100 viene da linspace
+        frames = struct('cdata', cell(1,num_frames), 'colormap', cell(1,num_frames));
+    end
     for i = 1 : size(tempi, 2) - 1
        t = linspace(tempi(i), tempi(i + 1));
        for j = 1 : size(t, 2)
-           q = polyval(parametri(i, :), t(j));
-           x = cos(q);
-           y = sin(q);
-           plot([0, x], [0, y], 'linewidth', 2);
-           axis([-2 2 -2 2]);
-           pause(tempi(i) / size(t, 2));
-           frames(count) = getframe(gcf);
-           count = count + 1;
+           q = zeros(size(parametri, 1));
+           for k = 1 : size(parametri, 1)
+               poly = parametri(k, i, :);
+               polyVec = reshape(poly, [1,4]);
+               q(k) = polyval(polyVec, t(j));
+               if (k == 1)
+                   x(k) = 0;
+                   y(k) = cos(q(k));
+                   z(k) = sin(q(k));
+               else
+                   x(k) = x(k-1) + cos(q(k));
+                   y(k) = y(k-1) + sin(q(k));
+                   z(k) = z(k-1);
+               end
+           end
+           figure(size(parametri, 1) + 1)
+           for k = 1 : size(parametri, 1) - 1
+               plot3([0, x(k), x(k+1)], [0, y(k), y(k+1)], [0, z(k), z(k+1)], 'linewidth', 2);
+               hold on
+               shadeColor = [.85,.85,.85];
+               plot3([0, x(k), x(k+1)], [0, y(k), y(k+1)], [0, 0, 0],'-','Color',shadeColor,'LineWidth',2); 
+               plot3([0, x(k), x(k+1)], [2, 2, 2], [0, z(k), z(k+1)],'-','Color',shadeColor,'LineWidth',2); 
+               plot3([2, 2, 2], [0, y(k), y(k+1)], [0, z(k), z(k+1)],'-','Color',shadeColor,'LineWidth',2);
+               hold off
+           end
+           axis([-2 2 -2 2 0 4]);
+           grid on
+           %pause(0.01)
+           pause(tempi(i+1) / size(t, 2));
+           if (salvaVideo)
+               frames(count) = getframe(gcf);
+               count = count + 1;
+           end
        end
     end
     
-    movie(frames);
-    videoFile = VideoWriter('animazione', 'MPEG-4');
-    open(videoFile);
-    writeVideo(videoFile, frames);
-    close(videoFile);
+    if (salvaVideo)
+        disp('Esportando il file video...')
+        movie(frames);
+        videoFile = VideoWriter('animazione', 'MPEG-4');
+        open(videoFile);
+        writeVideo(videoFile, frames);
+        close(videoFile);
+        disp('Fatto!')
+    end
 end
-
