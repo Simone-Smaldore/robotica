@@ -1,4 +1,4 @@
-function [] = animazione(parametri, tempi, tipologie, salvaVideo)
+function [] = animazioneGUI(parametri, tempi, tipologie, uiaxes, salvaVideo)
     disp('Animazione in esecuzione...')
     if (salvaVideo)
         count = 1;
@@ -23,15 +23,15 @@ function [] = animazione(parametri, tempi, tipologie, salvaVideo)
                    z(k) = z(k-1);
                end
            end
-           figure(size(parametri, 1) + 1)
+           
            for k = 1 : size(parametri, 1) - 1
-               plot3([0, x(k), x(k+1)], [0, y(k), y(k+1)], [0, z(k), z(k+1)], 'linewidth', 2);
-               hold on
+               plot3(uiaxes, [0, x(k), x(k+1)], [0, y(k), y(k+1)], [0, z(k), z(k+1)], 'linewidth', 2);
+               hold(uiaxes, 'on');
                shadeColor = [.85,.85,.85];
-               plot3([0, x(k), x(k+1)], [0, y(k), y(k+1)], [0, 0, 0],'-','Color',shadeColor,'LineWidth',2); 
-               plot3([0, x(k), x(k+1)], [2, 2, 2], [0, z(k), z(k+1)],'-','Color',shadeColor,'LineWidth',2); 
-               plot3([2, 2, 2], [0, y(k), y(k+1)], [0, z(k), z(k+1)],'-','Color',shadeColor,'LineWidth',2);
-               hold off
+               plot3(uiaxes, [0, x(k), x(k+1)], [0, y(k), y(k+1)], [0, 0, 0],'-','Color',shadeColor,'LineWidth',2); 
+               plot3(uiaxes, [0, x(k), x(k+1)], [2, 2, 2], [0, z(k), z(k+1)],'-','Color',shadeColor,'LineWidth',2); 
+               plot3(uiaxes, [2, 2, 2], [0, y(k), y(k+1)], [0, z(k), z(k+1)],'-','Color',shadeColor,'LineWidth',2);
+               hold(uiaxes, 'off');
            end
            axis([-2 2 -2 2 0 4]);
            grid on
