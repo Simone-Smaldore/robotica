@@ -12,11 +12,10 @@ function [] = animazioneGUI(parametri, tempi, tipologie, riferimenti, uiaxes, sa
             x = [0];
             y = [0];
             z = [0];
-            for k = 1 : size(parametri, 1)
+            for k = 1 : size(parametri, 1)            
                 poly = parametri(k, i, :);
                 polyVec = reshape(poly, [1,4]);
                 q(k) = polyval(polyVec, t(j));
-                
                 tipo = tipologie{k};
                 ref = riferimenti{k};
                 if strcmp(tipo, 'Rotoidale')
@@ -36,23 +35,38 @@ function [] = animazioneGUI(parametri, tempi, tipologie, riferimenti, uiaxes, sa
                 else
                    if strcmp(ref, 'x')
                         x(k+1) = q(k) + x(k);
+                        y(k+1) = y(k);
+                        z(k+1) = z(k);
                     elseif strcmp(ref, 'y')
+                        x(k+1) = x(k);
                         y(k+1) = q(k) + y(k);
+                        z(k+1) = z(k);
                    else
+                        x(k+1) = x(k);
+                        y(k+1) = y(k);
                         z(k+1) = q(k) + z(k);
                    end
                 end
             end
-           
-            for k = 1 : size(parametri, 1) - 1
-                plot3(uiaxes, [x(k), x(k+1)], [y(k), y(k+1)], [z(k), z(k+1)], 'linewidth', 2);
-                hold(uiaxes, 'on');
-                shadeColor = [.85,.85,.85];
-                plot3(uiaxes, [x(k), x(k+1)], [y(k), y(k+1)], [0, 0],'-','Color',shadeColor,'LineWidth',2); 
-                plot3(uiaxes, [x(k), x(k+1)], [2, 2], [z(k), z(k+1)],'-','Color',shadeColor,'LineWidth',2); 
-                plot3(uiaxes, [2, 2], [y(k), y(k+1)], [z(k), z(k+1)],'-','Color',shadeColor,'LineWidth',2);
-                hold(uiaxes, 'off');
+            
+      
+         
+            P0 = zeros(size(parametri, 1), 3);
+            P1 = zeros(size(parametri, 1), 3);
+            for k = 1 : size(parametri, 1) + 1
+                if k > 1 
+                    P0(k ,1) = x(k-1);
+                    P0(k ,2) = y(k-1);
+                    P0(k ,3) = z(k-1);
+                P1(k ,1) = x(k);
+                P1(k ,2) = y(k);
+                P1(k ,3) = z(k);
+                end
             end
+            X = [P0(:,1) P1(:,1)];
+            Y = [P0(:,2) P1(:,2)];
+            Z = [P0(:,3) P1(:,3)];
+            plot3(uiaxes,X',Y',Z','linewidth', 2)
             
             grid on
 %             pause(0.01)
