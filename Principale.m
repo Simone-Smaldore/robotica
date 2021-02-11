@@ -1,4 +1,4 @@
-percorso = [0 180];
+percorso = [0 360, 90, 180];
 [m, n] = size(percorso);
 
 while true
@@ -16,16 +16,19 @@ while true
         break
     end
     if scelta == 1
-        velocita = leggiVelocita(m, n);
         tempi = leggiTempi(n);
+        velocita = leggiVelocita(m, n);     
         parametri = generaPolinomiCubici(percorso, velocita, tempi);
-        %disp(parametri);
         stampaGrafico(parametri, tempi);
-        animazione(parametri, tempi, [], false);
+%         animazione(parametri, tempi, [], false);
     end
 
     if scelta == 2
-
+        tempi = leggiTempi(n);
+        velocita = calcolaVelocita(percorso, tempi);
+        parametri = generaPolinomiCubici(percorso, velocita, tempi);
+        stampaGrafico(parametri, tempi);
+%         animazione(parametri, tempi, [], false);
     end
 
     if scelta == 3

@@ -4,7 +4,7 @@ function [tempi] = leggiTempi(n)
         formato = 'Inserisci il tempo dal punto %d al punto %d: ';
         stringa = sprintf(formato, i-1, i);
         intervallo = input(stringa);
-        tempi(i) = sum(tempi(1 : i-1)) + intervallo;
+        tempi(i) = tempi(i-1) + intervallo;
     end
 end
 
