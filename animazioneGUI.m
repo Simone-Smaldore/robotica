@@ -24,9 +24,9 @@ function [] = animazioneGUI(parametri, tempi, tipologie, riferimenti, uiaxes, sa
                         y(k+1) = y(k) + cosd(q(k));
                         z(k+1) = z(k) + sind(q(k));
                     elseif strcmp(ref, 'y')
-                        x(k+1) = x(k) + cosd(q(k));
+                        x(k+1) = x(k) + sind(q(k));
                         y(k+1) = y(k);
-                        z(k+1) = z(k) + sind(q(k));
+                        z(k+1) = z(k) + cosd(q(k));
                     else
                         x(k+1) = x(k) + cosd(q(k));
                         y(k+1) = y(k) + sind(q(k));
