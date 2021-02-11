@@ -7,7 +7,7 @@ while true
     disp("1. Sequenza di polinomi cubici con velocità assegnate");
     disp("2. Sequenza di polinomi cubici con velocità calcolate ");
     disp("3. sequenza di profili trapezoidali con anticipo temporale specificato  ");
-    disp("0. Esci");
+    disp("0. Esci ");
     scelta =  input('Fai la tua scelta: ');
     while scelta > 3 || scelta < 0
         scelta = input('Fai una scelta corretta: ');
