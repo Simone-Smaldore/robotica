@@ -1,11 +1,11 @@
-percorso = [0 360, 90, 180];
+percorso = [0 180];
 [m, n] = size(percorso);
 
 while true
     disp("                          MENU    ");
     disp("1. Sequenza di polinomi cubici con velocità assegnate");
     disp("2. Sequenza di polinomi cubici con velocità calcolate ");
-    disp("3. sequenza di profili trapezoidali con anticipo temporale specificato  ");
+    disp("3. Sequenza di profili trapezoidali con anticipo temporale specificato  ");
     disp("0. Esci ");
     scelta =  input('Fai la tua scelta: ');
     while scelta > 3 || scelta < 0
@@ -32,7 +32,10 @@ while true
     end
 
     if scelta == 3
-
+        tempi = leggiTempi(n);
+        [valoriC, isVelocita] = leggiParametriC(m, n);
+        [q1c, q2c, tc] = generaTrapezi(percorso, tempi, valoriC, isVelocita);
+        stampaGraficoTrapezi(q2c, tc, percorso, tempi);
     end
 end
 
