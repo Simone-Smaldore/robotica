@@ -21,7 +21,6 @@ function [] = stampaGraficoTrapezi(q2c, tc, percorso, tempi)
             end        
         end
     end
-    disp(qvelocita);
     subplot(3,1,1);
     plot(t, qspazio);  
     hold on;
