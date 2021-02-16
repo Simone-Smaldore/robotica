@@ -1,34 +1,44 @@
 function [] = stampaGraficoTrapezi(q2c, tc, percorso, tempi)
     [m, n] = size(percorso);
+    qspazio = [];
+    qvelocita = [];
+    qaccelerazione = [];
     for k = 1 : n - 1
-        t = linspace(tempi(k), tempi(k+1), 1000);
-        qspazio = [];
-        qvelocita = [];
-        qaccelerazione = [];
-        for dt = 1 : size(t, 2)
-            if tempi(k) <= t(dt) && t(dt) <= tc + tempi(k)
-                qspazio(dt) = percorso(1,1) + 0.5 * q2c * t(dt)^2;
-                qvelocita(dt) = q2c * t(dt);
-                qaccelerazione(dt) = q2c;
-            elseif tc + tempi(k) < t(dt) && t(dt) <= tempi(k+1) - tc
-                qspazio(dt) = percorso(1,1) + q2c * tc * (t(dt) - 0.5*tc);
-                qvelocita(dt) = q2c * tc;
-                qaccelerazione(dt) = 0;
-            else
-                qspazio(dt) = percorso(1,2) - 0.5 * q2c * (tempi(2) - t(dt))^2;
-                qvelocita(dt) = q2c * (tempi(2) - t(dt));
-                qaccelerazione(dt) = -q2c;
-            end        
+        t = linspace(tempi(k), tempi(k+1), 100);
+        for j = 1 : m
+            for dt = 1 : size(t, 2)
+                if tempi(k) <= t(dt) && t(dt) <= tc(j,k) + tempi(k)
+                    qspazio(j, k, dt) = percorso(j,k) + 0.5 * q2c(j,k) * (t(dt) - tempi(k))^2;
+                    qvelocita(j,k, dt) = q2c(j,k) * (t(dt) - tempi(k));
+                    qaccelerazione(j, k, dt) = q2c(j,k);
+                elseif tc(j,k) + tempi(k) < t(dt) && t(dt) <= tempi(k+1) - tc(j,k)
+                    qspazio(j,k,dt) = percorso(j,k) + q2c(j,k) * tc(j,k) * ((t(dt) - tempi(k)) - 0.5*tc(j,k));
+                    qvelocita(j,k, dt) = q2c(j,k) * tc(j,k);
+                    qaccelerazione(j,k,dt) = 0;
+                else
+                    qspazio(j,k,dt) = percorso(j,k+1) - 0.5 * q2c(j,k) * (tempi(k+1) -tempi(k) - (t(dt) - tempi(k)))^2;
+                    qvelocita(j,k,dt) = q2c(j,k) * (tempi(k+1) - tempi(k) - (t(dt) - tempi(k)));
+                    qaccelerazione(j,k,dt) = -q2c(j,k);
+                end        
+            end
         end
     end
-    subplot(3,1,1);
-    plot(t, qspazio);  
-    hold on;
-    subplot(3,1,2);
-    plot(t, qvelocita);
-    hold on
-    subplot(3,1,3);      
-    plot(t, qaccelerazione);
-    hold on
+    for k = 1: n - 1
+        t = linspace(tempi(k), tempi(k + 1), 100);
+        for j = 1 : m
+            figure(j)
+            subplot(3,1,1);
+%             disp(reshape(qspazio(j,k,:), [1 200]));
+            plot(t, reshape(qspazio(j,k,:), [1 100]));  
+            hold on;
+            subplot(3,1,2);
+            plot(t, reshape(qvelocita(j,k,:), [1 100]));
+            hold on
+            subplot(3,1,3);      
+            plot(t, reshape(qaccelerazione(j,k,:), [1 100]));
+            hold on
+        end
+    end 
+
 end
 

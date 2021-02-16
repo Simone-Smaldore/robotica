@@ -1,4 +1,5 @@
-percorso = [0 180];
+percorso = [0 180 360;
+            0 360 520];
 [m, n] = size(percorso);
 
 while true
