@@ -1,5 +1,4 @@
-percorso = [0 180 360;
-            0 360 520];
+percorso = [0 3/pi*180 5/pi*180];
 [m, n] = size(percorso);
 
 while true
@@ -16,8 +15,8 @@ while true
         disp("Arrivederci");
         break
     end
-    if scelta == 1
-        tempi = leggiTempi(n);
+    tempi = leggiTempi(n, 'tempi');
+    if scelta == 1  
         velocita = leggiVelocita(m, n);     
         parametri = generaPolinomiCubici(percorso, velocita, tempi);
         stampaGrafico(parametri, tempi);
@@ -25,7 +24,6 @@ while true
     end
 
     if scelta == 2
-        tempi = leggiTempi(n);
         velocita = calcolaVelocita(percorso, tempi);
         parametri = generaPolinomiCubici(percorso, velocita, tempi);
         stampaGrafico(parametri, tempi);
@@ -33,10 +31,15 @@ while true
     end
 
     if scelta == 3
-        tempi = leggiTempi(n);
         [valoriC, isVelocita] = leggiParametriC(m, n);
         [q1c, q2c, tc] = generaTrapezi(percorso, tempi, valoriC, isVelocita);
-        stampaGraficoTrapezi(q2c, tc, percorso, tempi);
+        convalida = convalidaParametriTrapezio(percorso, tempi, q1c, q2c, isVelocita);
+        if ~convalida
+            disp("I parametri non sono validi inserisci dei valori adeguati.");
+            continue;
+        end
+        anticipi = leggiTempi(n - 1 , 'anticipi');
+        stampaGraficoTrapezi(q2c, tc, percorso, tempi, anticipi);
     end
 end
 

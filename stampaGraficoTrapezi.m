@@ -1,10 +1,10 @@
-function [] = stampaGraficoTrapezi(q2c, tc, percorso, tempi)
+function [] = stampaGraficoTrapezi(q2c, tc, percorso, tempi, anticipi)
     [m, n] = size(percorso);
     qspazio = [];
     qvelocita = [];
     qaccelerazione = [];
     for k = 1 : n - 1
-        t = linspace(tempi(k), tempi(k+1), 100);
+        t = linspace(tempi(k), tempi(k+1), 1000);
         for j = 1 : m
             for dt = 1 : size(t, 2)
                 if tempi(k) <= t(dt) && t(dt) <= tc(j,k) + tempi(k)
@@ -23,19 +23,38 @@ function [] = stampaGraficoTrapezi(q2c, tc, percorso, tempi)
             end
         end
     end
+%     s = zeros(size(qspazio));
+%     v = zeros(size(qvelocita));
+%     a = zeros(size(qaccelerazione));
+%   for k = 1: n - 1
+%         int(k) = linspace(tempi(k) - anticipi(k), tempi(k + 1) - anticipi(k), 1000);
+% 
+%   end 
+%   for k = 1: n - 1
+%       for j = 1:n
+%           for i = 1 : size(int,2)
+%             if int(k) < min(int(k+1))
+%                 s = qspazio(j, k, i);
+%             else
+%                 
+%                 s = qspazio(j, k, i) + qspazio(j, k + 1, i);
+%           end
+%           
+%       end
+% 
+%   end
     for k = 1: n - 1
-        t = linspace(tempi(k), tempi(k + 1), 100);
+        t = linspace(tempi(k) - anticipi(k), tempi(k + 1) - anticipi(k), 1000);
         for j = 1 : m
             figure(j)
             subplot(3,1,1);
-%             disp(reshape(qspazio(j,k,:), [1 200]));
-            plot(t, reshape(qspazio(j,k,:), [1 100]));  
+            plot(t, reshape(qspazio(j,k,:), [1 1000]));  
             hold on;
             subplot(3,1,2);
-            plot(t, reshape(qvelocita(j,k,:), [1 100]));
+            plot(t, reshape(qvelocita(j,k,:), [1 1000]));
             hold on
             subplot(3,1,3);      
-            plot(t, reshape(qaccelerazione(j,k,:), [1 100]));
+            plot(t, reshape(qaccelerazione(j,k,:), [1 1000]));
             hold on
         end
     end 
