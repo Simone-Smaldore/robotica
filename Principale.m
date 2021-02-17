@@ -1,4 +1,4 @@
-percorso = [0 3/pi*180 5/pi*180];
+percorso = [0 3/pi*180 5/pi*180;];
 [m, n] = size(percorso);
 
 while true

@@ -4,7 +4,7 @@ function [] = stampaGraficoTrapezi(q2c, tc, percorso, tempi, anticipi)
     qvelocita = [];
     qaccelerazione = [];
     for k = 1 : n - 1
-        t = linspace(tempi(k), tempi(k+1), 1000);
+        t = linspace(tempi(k), tempi(k+1), 100 * (tempi(k+1) - tempi(k)));
         for j = 1 : m
             for dt = 1 : size(t, 2)
                 if tempi(k) <= t(dt) && t(dt) <= tc(j,k) + tempi(k)
@@ -23,41 +23,59 @@ function [] = stampaGraficoTrapezi(q2c, tc, percorso, tempi, anticipi)
             end
         end
     end
-%     s = zeros(size(qspazio));
-%     v = zeros(size(qvelocita));
-%     a = zeros(size(qaccelerazione));
-%   for k = 1: n - 1
-%         int(k) = linspace(tempi(k) - anticipi(k), tempi(k + 1) - anticipi(k), 1000);
-% 
-%   end 
-%   for k = 1: n - 1
-%       for j = 1:n
-%           for i = 1 : size(int,2)
-%             if int(k) < min(int(k+1))
-%                 s = qspazio(j, k, i);
-%             else
-%                 
-%                 s = qspazio(j, k, i) + qspazio(j, k + 1, i);
-%           end
-%           
-%       end
-% 
-%   end
-    for k = 1: n - 1
-        t = linspace(tempi(k) - anticipi(k), tempi(k + 1) - anticipi(k), 1000);
-        for j = 1 : m
-            figure(j)
-            subplot(3,1,1);
-            plot(t, reshape(qspazio(j,k,:), [1 1000]));  
+    tmax =  tempi(n) - sum(anticipi);
+    intervalloTroncato = linspace(0, tmax, 100*tmax);
+    for j = 1: m   
+        figure(j)
+        figure('units','normalized','outerposition',[0 0 1 1]);
+        matriceSpazio = [];
+        matriceVelocita = [];
+        matriceAccelerazione = [];
+        for k = 1 : n - 1       
+            spazio = reshape(qspazio(j,k,:), [1 (100 * (tempi(k+1) - tempi(k)))]);
+            velocita = reshape(qvelocita(j,k,:), [1 (100 * (tempi(k+1) - tempi(k)))]);
+            accelerazione = reshape(qaccelerazione(j,k,:), [1 (100 * (tempi(k+1) - tempi(k)))]);
+            matriceSpazio(k,:) = circshift([repmat(zeros(size(spazio)), 1, k-1), spazio, repmat(zeros(size(spazio)),1 , n-1-k)], -anticipi(k) * 100);
+            matriceVelocita(k,:) = circshift([repmat(zeros(size(velocita)), 1, k-1), velocita, repmat(zeros(size(velocita)),1 , n-1-k)], -anticipi(k) * 100);
+            matriceAccelerazione(k,:) = circshift([repmat(zeros(size(accelerazione)), 1, k-1), accelerazione, repmat(zeros(size(accelerazione)),1 , n-1-k)], -anticipi(k) * 100);
+            
+            if k == n - 1
+                subplot(3,2,2);
+%                 plot(intervalloTroncato, sum(matriceSpazio(:,1:tmax*100)));
+                matriceMedia = calcolaMediaMatrice(matriceSpazio);
+                plot(intervalloTroncato, matriceMedia(1:tmax*100));
+                hold on;
+                subplot(3,2,4);
+                plot(intervalloTroncato, sum(matriceVelocita(:,1:tmax*100)));
+                hold on;
+                subplot(3,2,6);
+                plot(intervalloTroncato, sum(matriceAccelerazione(:,1:tmax*100)));
+                hold on;
+            end
+                  
+            t = linspace(tempi(k) - anticipi(k), tempi(k + 1) - anticipi(k), 100 * (tempi(k+1) - tempi(k)));
+            subplot(3,2,1);
+            plot(t, reshape(qspazio(j,k,:), [1 100 * (tempi(k+1) - tempi(k))]));  
             hold on;
-            subplot(3,1,2);
-            plot(t, reshape(qvelocita(j,k,:), [1 1000]));
+            subplot(3,2,3);
+            plot(t, reshape(qvelocita(j,k,:), [1 100 * (tempi(k+1) - tempi(k))]));
             hold on
-            subplot(3,1,3);      
-            plot(t, reshape(qaccelerazione(j,k,:), [1 1000]));
+            subplot(3,2,5);      
+            plot(t, reshape(qaccelerazione(j,k,:), [1 100 * (tempi(k+1) - tempi(k))]));
             hold on
         end
-    end 
+    end
+    
+end
 
+function matriceMedia = calcolaMediaMatrice(matriceSpazio)
+    matriceMedia = [];
+    for i = 1: size(matriceSpazio, 2)
+        temp = matriceSpazio(:,i);
+        matriceMedia(i) = sum(matriceSpazio(:,i));
+        if numel(temp(temp ~= 0)) == 2
+            matriceMedia(i) = matriceMedia(i) / 2;
+        end
+    end
 end
 
