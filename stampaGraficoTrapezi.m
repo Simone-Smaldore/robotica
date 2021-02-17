@@ -74,7 +74,11 @@ function matriceMedia = calcolaMediaMatrice(matriceSpazio)
         temp = matriceSpazio(:,i);
         matriceMedia(i) = sum(matriceSpazio(:,i));
         if numel(temp(temp ~= 0)) == 2
-            matriceMedia(i) = matriceMedia(i) / 2;
+            j = find(temp) % trova gli indici dei non nulli in temp
+            posizioni = matriceSpazio(j(1), :) % uso il primo non nullo in temp per individuare qf
+            posNonNulle = posizioni(posizioni ~= 0);
+            qf = posNonNulle(end) % qf è lultimo dei non nulli nelle posizioni
+            matriceMedia(i) = matriceMedia(i) - qf;
         end
     end
 end
