@@ -15,7 +15,7 @@ while true
         disp("Arrivederci");
         break
     end
-    tempi = leggiTempi(n, 'tempi');
+    tempi = leggiTempi(n, 'tempi')
     if scelta == 1  
         velocita = leggiVelocita(m, n);     
         parametri = generaPolinomiCubici(percorso, velocita, tempi);
@@ -38,7 +38,7 @@ while true
             disp("I parametri non sono validi inserisci dei valori adeguati.");
             continue;
         end
-        anticipi = leggiTempi(n - 1 , 'anticipi');
+        anticipi = leggiTempi(n - 1 , 'anticipi')
         stampaGraficoTrapezi(q2c, tc, percorso, tempi, anticipi);
     end
 end
