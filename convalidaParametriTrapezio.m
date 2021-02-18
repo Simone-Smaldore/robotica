@@ -11,6 +11,9 @@ function [convalida] = convalidaParametriTrapezio(percorso, tempi, q1c ,q2c, isV
                if abs(q2c(j, k)) < 4*abs(percorso(j,k+1) - percorso(j,k))/(tempi(k+1) - tempi(k))^2 
                    convalida = false;
                end
+               if sign(q2c(j, k)) ~= sign(percorso(j,k+1) - percorso(j,k))
+                   convalida = false;
+               end
            end
        end
     end

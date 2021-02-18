@@ -1,4 +1,6 @@
-percorso = [0 3/pi*180 5/pi*180;];
+% percorso = [0 3/pi*180 5/pi*180;
+%             0 3/pi*180 5/pi*180];
+percorso = immettiPercorso();
 [m, n] = size(percorso);
 
 while true
@@ -11,23 +13,22 @@ while true
     while scelta > 3 || scelta < 0
         scelta = input('Fai una scelta corretta: ');
     end
+    close all;
     if scelta == 0
         disp("Arrivederci");
         break
     end
-    tempi = leggiTempi(n, 'tempi')
+    tempi = leggiTempi(n, 'tempi'); 
     if scelta == 1  
         velocita = leggiVelocita(m, n);     
         parametri = generaPolinomiCubici(percorso, velocita, tempi);
         stampaGrafico(parametri, tempi);
-%         animazione(parametri, tempi, [], false);
     end
 
     if scelta == 2
         velocita = calcolaVelocita(percorso, tempi);
         parametri = generaPolinomiCubici(percorso, velocita, tempi);
         stampaGrafico(parametri, tempi);
-%         animazione(parametri, tempi, [], false);
     end
 
     if scelta == 3

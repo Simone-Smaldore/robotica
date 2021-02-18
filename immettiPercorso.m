@@ -1,25 +1,13 @@
 function [percorso] = immettiPercorso()
-    disp("Inserimento percorso nello spazio dei giunti");
-    i = 1;
+    numGiunti = input('Quanti giunti vuoi considerare? ');
+    numIntervalli = input('Quanti valori di variabili di giunto vuoi considerare? ');
     percorso = [];
-    while true
-       richiestaNumero = 'Inserisci variabile percorso: '; 
-       variabile = input(richiestaNumero);
-       if ~isnumeric(variabile)
-           disp('Inserisci una variabile di giunto adeguata');
-           continue;
-       end
-       percorso(i) = str2double(variabile);   
-       altroPunto = 'Vuoi inserire altri punti nel percorso? [Y/N] ';
-       str = input(altroPunto,'s');
-       while str ~= 'Y' && str ~= 'y' && str ~= 'N' && str ~= 'n'
-           rispostaAdeguata = 'Inserire una risposta adeguata [Y/N]: ';
-           str = input(rispostaAdeguata,'s');
-       end
-       if str == 'N' || str == 'n'
-           break
-       end   
-       i = i + 1;
+    for i = 1: numGiunti
+        for j = 1: numIntervalli
+            formato = 'Inserisci variabile di giunto %d per il giunto %d : ';
+            stringa = sprintf(formato ,j, i);
+            percorso(i, j) = input(stringa);
+        end
     end
 end
 
