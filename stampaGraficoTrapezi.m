@@ -14,46 +14,49 @@ function [] = stampaGraficoTrapezi(q2c, tc, percorso, tempi, anticipi)
         matriceAccelerazione = [];
         for k = 1 : n - 1
             numTimestamp = 100 * (tempi(k+1) - tempi(k));
-            spazio = reshape(qspazio(j,k,:), [1 numTimestamp]);
-            velocita = reshape(qvelocita(j,k,:), [1 numTimestamp]);
-            accelerazione = reshape(qaccelerazione(j,k,:), [1 numTimestamp]);
+            tempok = 100 * tempi(k);
+            spazio = reshape(qspazio(j,k,1:numTimestamp), [1 numTimestamp]);
+            velocita = reshape(qvelocita(j,k,1:numTimestamp), [1 numTimestamp]);
+            accelerazione = reshape(qaccelerazione(j,k,1:numTimestamp), [1 numTimestamp]);
             anticipo = -anticipi(k) * 100;
-            matriceSpazio(k,:) = circshift([repmat(zeros(size(spazio)), 1, k-1), spazio, repmat(zeros(size(spazio)),1 , n-1-k)], anticipo);
-            matriceVelocita(k,:) = circshift([repmat(zeros(size(velocita)), 1, k-1), velocita, repmat(zeros(size(velocita)),1 , n-1-k)], anticipo);
-            matriceAccelerazione(k,:) = circshift([repmat(zeros(size(accelerazione)), 1, k-1), accelerazione, repmat(zeros(size(accelerazione)),1 , n-1-k)], anticipo);
-            if k == n - 1
+            matriceSpazio(k,tempok +anticipo + 1: tempok + numTimestamp +anticipo) = spazio;
+            matriceVelocita(k,tempok + anticipo + 1: tempok + numTimestamp+anticipo) = velocita;
+            matriceAccelerazione(k,tempok+anticipo + 1: tempok + numTimestamp+anticipo) = accelerazione;
+            numcolumn = 2;
+            secondoElemento = 3;
+            terzoElemento = 5;
+            if n - 1 == 1
+                numcolumn = 1;
+                secondoElemento = 2;
+                terzoElemento = 3;
+            end
+            if k == n - 1 && k ~= 1
                 subplot(3,2,2);
-                title('Somma dei grafici di posizione');
                 sovrapposizione = calcolaConSovrapposizione(matriceSpazio);
                 plot(intervalloTroncato, sovrapposizione(1 : passo));
+                title('Somma dei grafici di posizione');
                 hold on;
                 subplot(3,2,4);
-                title('Somma dei grafici di velocità');
                 plot(intervalloTroncato, sum(matriceVelocita(:, 1 : passo)));
+                title('Somma dei grafici di velocità');
                 hold on;
                 subplot(3,2,6);
-                title('Somma dei grafici di accelerazione');
                 plot(intervalloTroncato, sum(matriceAccelerazione(:, 1 : passo)));
+                title('Somma dei grafici di accelerazione');
                 hold on;
             end
-            subplot(3,2,2);
-            title('Somma dei grafici di posizione');
-            subplot(3,2,4);
-            title('Somma dei grafici di velocità');
-            subplot(3,2,6);
-            title('Somma dei grafici di accelerazione');
             t = linspace(tempi(k) - anticipi(k), tempi(k + 1) - anticipi(k), numTimestamp);
-            subplot(3,2,1);
+            subplot(3,numcolumn,1);
+            plot(t, reshape(qspazio(j,k,1:numTimestamp), [1 numTimestamp]));  
             title('Posizione');
-            plot(t, reshape(qspazio(j,k,:), [1 numTimestamp]));  
             hold on;
-            subplot(3,2,3);
+            subplot(3,numcolumn,secondoElemento);
+            plot(t, reshape(qvelocita(j,k,1:numTimestamp), [1 numTimestamp]));
             title('Velocità');
-            plot(t, reshape(qvelocita(j,k,:), [1 numTimestamp]));
             hold on
-            subplot(3,2,5);   
+            subplot(3,numcolumn,terzoElemento);   
+            plot(t, reshape(qaccelerazione(j,k,1:numTimestamp), [1 numTimestamp]));
             title('Accelerazione');
-            plot(t, reshape(qaccelerazione(j,k,:), [1 numTimestamp]));
             hold on
         end
     end

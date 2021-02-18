@@ -21,19 +21,20 @@ function [] = stampaGraficoTrapeziGUI(parent, q2c, tc, percorso, tempi, anticipi
     matriceAccelerazione = [];
     for k = 1 : n - 1
         numTimestamp = 100 * (tempi(k+1) - tempi(k));
-        spazio = reshape(qspazio(j,k,:), [1 numTimestamp]);
-        velocita = reshape(qvelocita(j,k,:), [1 numTimestamp]);
-        accelerazione = reshape(qaccelerazione(j,k,:), [1 numTimestamp]);
+        tempok = 100 * tempi(k);
+        spazio = reshape(qspazio(j,k,1:numTimestamp), [1 numTimestamp]);
+        velocita = reshape(qvelocita(j,k,1:numTimestamp), [1 numTimestamp]);
+        accelerazione = reshape(qaccelerazione(j,k,1:numTimestamp), [1 numTimestamp]);
         anticipo = -anticipi(k) * 100;
-        matriceSpazio(k,:) = circshift([repmat(zeros(size(spazio)), 1, k-1), spazio, repmat(zeros(size(spazio)),1 , n-1-k)], anticipo);
-        matriceVelocita(k,:) = circshift([repmat(zeros(size(velocita)), 1, k-1), velocita, repmat(zeros(size(velocita)),1 , n-1-k)], anticipo);
-        matriceAccelerazione(k,:) = circshift([repmat(zeros(size(accelerazione)), 1, k-1), accelerazione, repmat(zeros(size(accelerazione)),1 , n-1-k)], anticipo);
-        if k == n - 1
+        matriceSpazio(k,tempok +anticipo + 1: tempok + numTimestamp +anticipo) = spazio;
+        matriceVelocita(k,tempok + anticipo + 1: tempok + numTimestamp+anticipo) = velocita;
+        matriceAccelerazione(k,tempok+anticipo + 1: tempok + numTimestamp+anticipo) = accelerazione;
+        if k == n - 1 && k ~= 1
             axesSommaPos = subplot(6, 1, 4);
             axesSommaPos.Parent = parent;
             axesSommaPos.Title.String = 'Somma dei grafici di posizione';
             hold(axesSommaPos, 'on');
-            sovrapposizione = calcolaConSovrapposizione(matriceSpazio)
+            sovrapposizione = calcolaConSovrapposizione(matriceSpazio);
             plot(axesSommaPos, intervalloTroncato, sovrapposizione(1 : passo));
             axesSommaVel = subplot(6, 1, 5);
             axesSommaVel.Parent = parent;
@@ -47,8 +48,8 @@ function [] = stampaGraficoTrapeziGUI(parent, q2c, tc, percorso, tempi, anticipi
             plot(axesSommaAcc, intervalloTroncato, sum(matriceAccelerazione(:, 1 : passo)));
         end
         t = linspace(tempi(k) - anticipi(k), tempi(k + 1) - anticipi(k), numTimestamp);
-        plot(axesPos, t, reshape(qspazio(j,k,:), [1 numTimestamp]));
-        plot(axesVel, t, reshape(qvelocita(j,k,:), [1 numTimestamp]));
-        plot(axesAcc, t, reshape(qaccelerazione(j,k,:), [1 numTimestamp]));
+        plot(axesPos, t, reshape(qspazio(j,k,1:numTimestamp), [1 numTimestamp]));
+        plot(axesVel, t, reshape(qvelocita(j,k,1:numTimestamp), [1 numTimestamp]));
+        plot(axesAcc, t, reshape(qaccelerazione(j,k,1:numTimestamp), [1 numTimestamp]));
     end
 end
