@@ -1,4 +1,4 @@
-function [] = animazioneGUI(parametri, tempi, tipologie, riferimenti, uiaxes, salvaVideo)
+function [] = animazioneGUI(parametri, tempi, tipologie, riferimenti, salvaVideo)
     disp('Animazione in esecuzione...')
     if (salvaVideo)
         count = 1;
@@ -66,7 +66,10 @@ function [] = animazioneGUI(parametri, tempi, tipologie, riferimenti, uiaxes, sa
             X = [P0(:,1) P1(:,1)];
             Y = [P0(:,2) P1(:,2)];
             Z = [P0(:,3) P1(:,3)];
-            plot3(uiaxes,X',Y',Z','linewidth', 2)
+            plot3(X',Y',Z','linewidth', 2);
+            xlim([-2 2]);
+            ylim([-2 2]);
+            zlim([0 4]);
             
             grid on
 %             pause(0.01)

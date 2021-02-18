@@ -10,7 +10,6 @@ function [q1c, q2c, tc] = generaTrapezi(percorso, tempi, valoriC, isVelocita)
                 tc(j, i) = (percorso(j, i) - percorso(j, i + 1) + q1c(j, i) * (tempi(i + 1)-tempi(i))) / q1c(j, i);
                 q2c(j, i) = q1c(j, i)^2/(percorso(j, i) - percorso(j, i + 1) + q1c(j, i) * (tempi(i + 1)-tempi(i)));
             else
-               
                 q2c(j, i) = valoriC(j, i);
 %                 if q2c(j,i) >= 0
 %                     sottrazione = percorso(j, i+1) - percorso(j, i);
