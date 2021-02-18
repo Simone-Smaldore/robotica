@@ -40,40 +40,40 @@ function [] = stampaGraficoTrapezi(q2c, tc, percorso, tempi, anticipi)
             matriceSpazio(k,:) = circshift([repmat(zeros(size(spazio)), 1, k-1), spazio, repmat(zeros(size(spazio)),1 , n-1-k)], -anticipi(k) * 100);
             matriceVelocita(k,:) = circshift([repmat(zeros(size(velocita)), 1, k-1), velocita, repmat(zeros(size(velocita)),1 , n-1-k)], -anticipi(k) * 100);
             matriceAccelerazione(k,:) = circshift([repmat(zeros(size(accelerazione)), 1, k-1), accelerazione, repmat(zeros(size(accelerazione)),1 , n-1-k)], -anticipi(k) * 100);
-            if k == n - 1
+            numcolumn = 1;
+            secondoElemento = 2;
+            terzoElemento = 3;
+            if k == n - 1 && k ~= 1
+                numcolumn = 2;
+                secondoElemento = 3;
+                terzoElemento = 5;
                 subplot(3,2,2);
-                title('Somma dei grafici di posizione');
 %                 plot(intervalloTroncato, sum(matriceSpazio(:,1:tmax*100)));
                 matriceMedia = calcolaMediaMatrice(matriceSpazio);
                 plot(intervalloTroncato, matriceMedia(1:tmax*100));
+                title('Somma dei grafici di posizione');
                 hold on;
                 subplot(3,2,4);
-                title('Somma dei grafici di velocità');
                 plot(intervalloTroncato, sum(matriceVelocita(:,1:tmax*100)));
+                title('Somma dei grafici di velocità');
                 hold on;
                 subplot(3,2,6);
-                title('Somma dei grafici di accelerazione');
                 plot(intervalloTroncato, sum(matriceAccelerazione(:,1:tmax*100)));
+                title('Somma dei grafici di accelerazione');
                 hold on;
             end
-            subplot(3,2,2);
-            title('Somma dei grafici di posizione');
-            subplot(3,2,4);
-            title('Somma dei grafici di velocità');
-            subplot(3,2,6);
-            title('Somma dei grafici di accelerazione');
             t = linspace(tempi(k) - anticipi(k), tempi(k + 1) - anticipi(k), 100 * (tempi(k+1) - tempi(k)));
-            subplot(3,2,1);
-            title('Posizione');
+            subplot(3,numcolumn,1);
             plot(t, reshape(qspazio(j,k,:), [1 100 * (tempi(k+1) - tempi(k))]));  
+            title('Posizione');
             hold on;
-            subplot(3,2,3);
-            title('Velocità');
+            subplot(3,numcolumn,secondoElemento);
             plot(t, reshape(qvelocita(j,k,:), [1 100 * (tempi(k+1) - tempi(k))]));
+            title('Velocità');
             hold on
-            subplot(3,2,5);   
-            title('Accelerazione');
+            subplot(3,numcolumn,terzoElemento);   
             plot(t, reshape(qaccelerazione(j,k,:), [1 100 * (tempi(k+1) - tempi(k))]));
+            title('Accelerazione');
             hold on
         end
     end
