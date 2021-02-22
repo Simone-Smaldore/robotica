@@ -1,9 +1,7 @@
 function [] = animazioneGUI(parametri, tempi, tipologie, riferimenti, salvaVideo)
-    disp('Animazione in esecuzione...')
     if (salvaVideo)
         count = 1;
-        num_frames = size(tempi, 2) * 100 * size(parametri, 1); % 100 viene da linspace
-        frames = struct('cdata', cell(1,num_frames), 'colormap', cell(1,num_frames));
+        num_frames = size(tempi, 2) * 100 * size(parametri, 1);
     end
     for i = 1 : size(tempi, 2) - 1
         t = linspace(tempi(i), tempi(i + 1));
@@ -82,12 +80,10 @@ function [] = animazioneGUI(parametri, tempi, tipologie, riferimenti, salvaVideo
     end
     
     if (salvaVideo)
-        disp('Esportando il file video...')
         movie(frames);
         videoFile = VideoWriter('animazione', 'MPEG-4');
         open(videoFile);
         writeVideo(videoFile, frames);
         close(videoFile);
-        disp('Fatto!')
     end
 end

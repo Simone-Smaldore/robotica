@@ -4,7 +4,7 @@ function [convalida] = convalidaParametriTrapezio(percorso, tempi, q1c ,q2c, isV
     for k = 1: n - 1
        for j = 1: m 
            if isVelocita
-               if abs(q1c(j, k)) <= abs(percorso(j,k+1) - percorso(j,k))/(tempi(k+1) - tempi(k)) || abs(q1(j, k)) > 2 * abs(percorso(j,k+1) - percorso(j,k))/(tempi(k+1) - tempi(k))
+               if abs(q1c(j, k)) <= abs(percorso(j,k+1) - percorso(j,k))/(tempi(k+1) - tempi(k)) || abs(q1c(j, k)) > 2 * abs(percorso(j,k+1) - percorso(j,k))/(tempi(k+1) - tempi(k))
                    convalida = false;
                end
            else
